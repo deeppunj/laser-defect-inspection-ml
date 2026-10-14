@@ -38,5 +38,6 @@ where = ["src"]
 testpaths = ["tests"]
 # I let tests import my shared helper file tests/tests_helpers.py.
 pythonpath = ["tests"]
-# I hide one harmless warning that the shap library itself triggers inside matplotlib.
-filterwarnings = ["ignore:The set_bad function:PendingDeprecationWarning"]
+
+# I hide harmless warnings that the shap library itself triggers inside matplotlib.
+filterwarnings = ["ignore::PendingDeprecationWarning:shap.*"]

@@ -1,6 +1,30 @@
 # Laser Weld Defect Inspection with Machine Learning
 
-**Status: in active development (phases 0–6 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
+![tests](https://github.com/deeppunj/portfolio-DS-ML-AI/actions/workflows/tests.yml/badge.svg)
+
+**Status: complete (v1.0).** An end-to-end, tested machine-learning pipeline that detects laser-weld defects from thermal camera frames.
+
+## Summary
+- **Data:** 16,362 labelled LWIR frames (32×32, 30 Hz) from 97 real laser beam welds (Walther et al. 2025, CC BY 4.0).
+- **Model:** Random Forest on 7 physics-motivated thermal features, computed without labels or future frames.
+- **Evaluation:** nested cross-validation split **by weld**, compared with a position-only leakage baseline.
+- **Result:** ROC AUC **0.974 ± 0.007**, balanced accuracy **0.927**, 91% of unsound frames detected at 5.6% false alarms.
+- **Explanation:** SHAP shows the model relies on heat, hot-spot strength and melt-zone size.
+- **Tools:** Python, pandas, scikit-learn, SHAP, Streamlit, pytest (31 tests), GitHub Actions.
+
+## Dashboard
+```bash
+python -m laser_defect.model    # trains and saves the model (once)
+streamlit run app.py            # opens the dashboard in the browser
+```
+Pick a weld to see the model's defect probability over time against the true label, the first alarm versus the first truly unsound frame, and any thermal frame.
+
+## Limitations
+- Labels follow time inside each weld (Beginning → Sound → Unsound in 93 of 97 welds), so part of the problem is "when does the weld change". The position-only baseline makes this visible.
+- The top SHAP feature (hot-band position) may partly reflect drift over time rather than the defect itself.
+- Frame-level labels: errors concentrate at the sound/unsound transition, where the label boundary is not visible in a single frame.
+- One dataset and one welding setup; performance on other materials, speeds or cameras is untested.
+- No deployment container (out of scope).
 
 ## Goal
 Detect when a laser beam weld turns from **sound** to **unsound** (a discontinuity forms as the metal sheets move apart), using in-process sensor data from real welding experiments, and explain which physical signals drive the prediction.
@@ -101,9 +125,9 @@ The model relies on physically meaningful signals (less heat, weaker and smaller
 | 4 | Baseline model, split by weld to avoid leakage | Done |
 | 5 | Random Forest, cross-validation, threshold choice | Done |
 | 6 | Model explanation with SHAP | Done |
-| 7 | Test suite for data, features and pipeline | Next |
-| 8 | Streamlit dashboard | Planned |
-| 9 | Final results, reproducibility, limitations | Planned |
+| 7 | Test suite for data, features and pipeline | Done |
+| 8 | Streamlit dashboard | Done |
+| 9 | Final results, reproducibility, limitations | Done |
 
 ## Run it
 ```bash

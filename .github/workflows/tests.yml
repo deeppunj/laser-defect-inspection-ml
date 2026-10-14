@@ -1,0 +1,16 @@
+# Phase 7: GitHub runs my tests automatically on every push.
+# Tests that need the real dataset are skipped there (it is not stored in git).
+name: tests
+on: [push, pull_request]
+# This file must live in the REPOSITORY ROOT: portfolio-DS-ML-AI/.github/workflows/
+# so I tell GitHub to run every step inside my project folder.
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e .
+      - run: pytest -q

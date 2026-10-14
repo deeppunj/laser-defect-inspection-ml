@@ -3,4 +3,4 @@
 # so I can write: from laser_defect.download import download_dataset
 
 # I store the version in one place so I can print it to check my install.
-__version__ = "0.3.0"
+__version__ = "0.4.0"

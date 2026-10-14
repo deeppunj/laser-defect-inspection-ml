@@ -1,6 +1,6 @@
 # Laser Weld Defect Inspection with Machine Learning
 
-**Status: in active development (phases 0–2 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
+**Status: in active development (phases 0–3 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
 
 ## Goal
 Detect when a laser beam weld turns from **sound** to **unsound** (a discontinuity forms as the metal sheets move apart), using in-process sensor data from real welding experiments, and explain which physical signals drive the prediction.
@@ -33,14 +33,29 @@ Full analysis: [notebooks/01_exploratory_analysis.ipynb](notebooks/01_explorator
 
 ![Position of labels inside the weld](reports/figures/position_by_label.png)
 
+## Features (phase 3)
+Seven features per frame, computed **without labels and without future frames** (each weld is compared only with its own first 0.5 s):
+
+| Feature | Physical meaning | Median Sound | Median Unsound |
+|---|---|---|---|
+| `contrast_rel` | Hot-spot strength relative to the weld start | 1.10 | 0.68 |
+| `mean_rel` | Overall heat relative to the weld start | 0.04 | −0.20 |
+| `hot_area` | Share of pixels above half maximum (hot-band size) | 0.18 | 0.15 |
+| `band_width` | Vertical width of the hot band (FWHM, px) | 6 | 5 |
+| `band_row` | Vertical position of the hot band (px) | 11.4 | 13.1 |
+| `asymmetry` | Left–right heat difference along the seam | −0.02 | −0.00 |
+| `contrast_change` | Change in contrast since the previous frame | −0.002 | −0.009 |
+
+Shape features are scale-free and the intensity features are relative to each weld's baseline, so the two camera scales no longer matter (verified by tests).
+
 ## Plan
 | Phase | Content | Status |
 |---|---|---|
 | 0 | Project setup, data download with integrity check, first tests | Done |
 | 1 | Load and validate thermal frames and labels | Done |
 | 2 | Exploratory analysis notebook | Done |
-| 3 | Physics-motivated features from thermal frames | Next |
-| 4 | Baseline model, split by weld to avoid leakage | Planned |
+| 3 | Physics-motivated features from thermal frames | Done |
+| 4 | Baseline model, split by weld to avoid leakage | Next |
 | 5 | Random Forest, cross-validation, threshold choice | Planned |
 | 6 | Model explanation with SHAP | Planned |
 | 7 | Test suite for data, features and pipeline | Planned |
@@ -53,6 +68,7 @@ pip install -e .
 python -m laser_defect.download   # downloads ~90 MB into data/ and checks its size
 python -m laser_defect.data       # loads, checks and saves all labelled thermal frames
 python -m laser_defect.explore    # re-creates all figures in reports/figures/
+python -m laser_defect.features   # computes 7 features per frame -> data/processed/features.csv
 pytest -v
 ```
 

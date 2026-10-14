@@ -1,0 +1,4 @@
+model,roc_auc,balanced_accuracy,f1_unsound
+position only (cheating baseline),0.976 ± 0.011,0.918 ± 0.016,0.877 ± 0.033
+thermal features (my model),0.948 ± 0.010,0.900 ± 0.006,0.862 ± 0.020
+thermal features + position,0.987 ± 0.006,0.953 ± 0.011,0.933 ± 0.023

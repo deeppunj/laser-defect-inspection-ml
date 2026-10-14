@@ -1,6 +1,6 @@
 # Laser Weld Defect Inspection with Machine Learning
 
-**Status: in active development (phases 0–3 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
+**Status: in active development (phases 0–4 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
 
 ## Goal
 Detect when a laser beam weld turns from **sound** to **unsound** (a discontinuity forms as the metal sheets move apart), using in-process sensor data from real welding experiments, and explain which physical signals drive the prediction.
@@ -48,6 +48,17 @@ Seven features per frame, computed **without labels and without future frames** 
 
 Shape features are scale-free and the intensity features are relative to each weld's baseline, so the two camera scales no longer matter (verified by tests).
 
+## Baseline results (phase 4)
+Logistic regression, 5-fold cross-validation **split by weld** (no weld in both training and test), mean ± std over folds:
+
+| Model | ROC AUC | Balanced accuracy | F1 (unsound) |
+|---|---|---|---|
+| Position in weld only (uses the future: cheating baseline) | 0.976 ± 0.011 | 0.918 ± 0.016 | 0.877 ± 0.033 |
+| **Thermal features only (deployable)** | **0.948 ± 0.010** | **0.900 ± 0.006** | **0.862 ± 0.020** |
+| Thermal features + position | 0.987 ± 0.006 | 0.953 ± 0.011 | 0.933 ± 0.023 |
+
+**Honest reading:** in this dataset the label is strongly tied to time, so "position in the weld" alone scores very high. But position needs to know when the weld ends, which is not available while welding. The thermal model uses only the current and earlier frames and still reaches 0.95 ROC AUC, so the thermal signal is real. Phase 5 tests whether a non-linear model closes the gap.
+
 ## Plan
 | Phase | Content | Status |
 |---|---|---|
@@ -55,8 +66,8 @@ Shape features are scale-free and the intensity features are relative to each we
 | 1 | Load and validate thermal frames and labels | Done |
 | 2 | Exploratory analysis notebook | Done |
 | 3 | Physics-motivated features from thermal frames | Done |
-| 4 | Baseline model, split by weld to avoid leakage | Next |
-| 5 | Random Forest, cross-validation, threshold choice | Planned |
+| 4 | Baseline model, split by weld to avoid leakage | Done |
+| 5 | Random Forest, cross-validation, threshold choice | Next |
 | 6 | Model explanation with SHAP | Planned |
 | 7 | Test suite for data, features and pipeline | Planned |
 | 8 | Streamlit dashboard | Planned |
@@ -69,6 +80,7 @@ python -m laser_defect.download   # downloads ~90 MB into data/ and checks its s
 python -m laser_defect.data       # loads, checks and saves all labelled thermal frames
 python -m laser_defect.explore    # re-creates all figures in reports/figures/
 python -m laser_defect.features   # computes 7 features per frame -> data/processed/features.csv
+python -m laser_defect.train      # weld-based cross-validation of the baseline models
 pytest -v
 ```
 

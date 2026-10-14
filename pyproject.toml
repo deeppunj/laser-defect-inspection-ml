@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 [project]
 # This is the name I import in Python: import laser_defect
 name = "laser_defect"
-version = "0.4.0"
+version = "0.5.0"
 description = "Detecting weld discontinuities in laser beam welding from thermal (LWIR) camera frames"
 requires-python = ">=3.10"
 # I add libraries phase by phase, so I always know why each one is here.
@@ -24,6 +24,7 @@ dependencies = [
     "ipykernel>=6.0",   # phase 2: lets VS Code run my Jupyter notebook in this environment
     "nbclient>=0.9",    # phase 2: lets my tests run the whole notebook automatically
     "nbformat>=5.9",    # phase 2: reads and writes .ipynb notebook files
+    "scikit-learn>=1.3", # phase 4: machine learning models and evaluation
 ]
 
 [tool.setuptools.packages.find]

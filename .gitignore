@@ -13,3 +13,6 @@ __pycache__/
 
 # Mac system files.
 .DS_Store
+
+# Trained models are re-created with: python -m laser_defect.model
+models/

@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 [project]
 # This is the name I import in Python: import laser_defect
 name = "laser_defect"
-version = "0.5.0"
+version = "0.6.0"
 description = "Detecting weld discontinuities in laser beam welding from thermal (LWIR) camera frames"
 requires-python = ">=3.10"
 # I add libraries phase by phase, so I always know why each one is here.
@@ -34,3 +34,5 @@ where = ["src"]
 [tool.pytest.ini_options]
 # I tell pytest to look for tests in the tests/ folder.
 testpaths = ["tests"]
+# I let tests import my shared helper file tests/tests_helpers.py.
+pythonpath = ["tests"]

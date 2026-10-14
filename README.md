@@ -1,6 +1,6 @@
 # Laser Weld Defect Inspection with Machine Learning
 
-**Status: in active development (phases 0–4 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
+**Status: in active development (phases 0–5 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
 
 ## Goal
 Detect when a laser beam weld turns from **sound** to **unsound** (a discontinuity forms as the metal sheets move apart), using in-process sensor data from real welding experiments, and explain which physical signals drive the prediction.
@@ -59,6 +59,19 @@ Logistic regression, 5-fold cross-validation **split by weld** (no weld in both 
 
 **Honest reading:** in this dataset the label is strongly tied to time, so "position in the weld" alone scores very high. But position needs to know when the weld ends, which is not available while welding. The thermal model uses only the current and earlier frames and still reaches 0.95 ROC AUC, so the thermal signal is real. Phase 5 tests whether a non-linear model closes the gap.
 
+## Random Forest results (phase 5)
+Thermal features only, nested cross-validation split by weld (outer 5 folds for testing; the decision threshold is chosen on the training welds only):
+
+| Metric | Logistic regression (phase 4) | **Random Forest** | Position-only baseline |
+|---|---|---|---|
+| ROC AUC | 0.948 ± 0.010 | **0.974 ± 0.007** | 0.976 ± 0.011 |
+| Balanced accuracy | 0.900 ± 0.006 | **0.927 ± 0.012** | 0.918 ± 0.016 |
+| F1 (unsound) | 0.862 ± 0.020 | **0.900 ± 0.016** | 0.877 ± 0.033 |
+
+Confusion matrix over all test welds: 4,987 of 5,485 unsound frames detected (91%), 614 of 10,877 sound frames falsely flagged (5.6%).
+
+The non-linear model, using only current and past thermal information, now matches the position-only baseline in ranking (ROC AUC) and beats it in balanced accuracy and F1, without knowing when the weld ends.
+
 ## Plan
 | Phase | Content | Status |
 |---|---|---|
@@ -67,8 +80,8 @@ Logistic regression, 5-fold cross-validation **split by weld** (no weld in both 
 | 2 | Exploratory analysis notebook | Done |
 | 3 | Physics-motivated features from thermal frames | Done |
 | 4 | Baseline model, split by weld to avoid leakage | Done |
-| 5 | Random Forest, cross-validation, threshold choice | Next |
-| 6 | Model explanation with SHAP | Planned |
+| 5 | Random Forest, cross-validation, threshold choice | Done |
+| 6 | Model explanation with SHAP | Next |
 | 7 | Test suite for data, features and pipeline | Planned |
 | 8 | Streamlit dashboard | Planned |
 | 9 | Final results, reproducibility, limitations | Planned |
@@ -81,6 +94,7 @@ python -m laser_defect.data       # loads, checks and saves all labelled thermal
 python -m laser_defect.explore    # re-creates all figures in reports/figures/
 python -m laser_defect.features   # computes 7 features per frame -> data/processed/features.csv
 python -m laser_defect.train      # weld-based cross-validation of the baseline models
+python -m laser_defect.model      # Random Forest, nested CV, saves models/defect_classifier.joblib
 pytest -v
 ```
 

@@ -38,7 +38,7 @@ SPEED_M_PER_MIN = {"001": 1, "002": 5}
 FRAME_SHAPE = (32, 32)
 
 # While checking the data I found that 29 welds (the earliest recordings, weld
-# numbers 000-014) store pixel values around 36,000-40,000, while all other welds
+# numbers 000-014) store pixel values around 11,000-40,000, while all other welds
 # are around 420-460. No weld mixes both. I mark each weld's scale, so later I can
 # normalise per weld instead of mixing two different units in one model.
 HIGH_SCALE_THRESHOLD = 1000.0
@@ -194,7 +194,7 @@ def print_summary(X, table, problems):
     print()
     high = sorted(table.loc[table["high_scale"], "weld"].unique())
     if high:
-        print(f"Note: {len(high)} welds use the high camera scale (~36,000 instead of ~430): "
+        print(f"Note: {len(high)} welds use a high camera scale (~11,000-40,000 instead of ~430): "
               f"{high[0]} ... {high[-1]}. I will normalise per weld in phase 3.")
     if problems:
         for weld, frames in problems.items():

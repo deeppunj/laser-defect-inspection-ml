@@ -10,7 +10,7 @@ build-backend = "setuptools.build_meta"
 [project]
 # This is the name I import in Python: import laser_defect
 name = "laser_defect"
-version = "0.2.0"
+version = "0.3.0"
 description = "Detecting weld discontinuities in laser beam welding from thermal (LWIR) camera frames"
 requires-python = ">=3.10"
 # I add libraries phase by phase, so I always know why each one is here.
@@ -20,6 +20,10 @@ dependencies = [
     "pytest>=7.0",      # I use pytest to test my code
     "numpy>=1.24",      # phase 1: I store thermal frames as numerical arrays
     "pillow>=10.0",     # phase 1: I use Pillow to open the .tiff thermal images
+    "matplotlib>=3.7",  # phase 2: I draw plots with matplotlib
+    "ipykernel>=6.0",   # phase 2: lets VS Code run my Jupyter notebook in this environment
+    "nbclient>=0.9",    # phase 2: lets my tests run the whole notebook automatically
+    "nbformat>=5.9",    # phase 2: reads and writes .ipynb notebook files
 ]
 
 [tool.setuptools.packages.find]

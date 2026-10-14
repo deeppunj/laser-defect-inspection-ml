@@ -12,7 +12,7 @@ from laser_defect.download import check_size, extract_zip
 
 def test_package_imports():
     # If this passes, my package is installed correctly.
-    assert laser_defect.__version__ == "0.6.0"
+    assert laser_defect.__version__ == "0.7.0"
 
 
 def test_extract_zip_creates_dataset_folder(tmp_path):

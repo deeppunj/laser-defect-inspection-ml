@@ -1,6 +1,6 @@
 # Laser Weld Defect Inspection with Machine Learning
 
-**Status: in active development (phases 0–5 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
+**Status: in active development (phases 0–6 of 10 complete).** This README is updated as each phase is finished. Results are only reported once they exist.
 
 ## Goal
 Detect when a laser beam weld turns from **sound** to **unsound** (a discontinuity forms as the metal sheets move apart), using in-process sensor data from real welding experiments, and explain which physical signals drive the prediction.
@@ -72,6 +72,25 @@ Confusion matrix over all test welds: 4,987 of 5,485 unsound frames detected (91
 
 The non-linear model, using only current and past thermal information, now matches the position-only baseline in ranking (ROC AUC) and beats it in balanced accuracy and F1, without knowing when the weld ends.
 
+## What drives the predictions (phase 6)
+SHAP values for 2,000 random frames explain the Random Forest's probability of "Unsound" (`python -m laser_defect.explain`):
+
+![SHAP feature importance](reports/figures/shap_importance.png)
+
+| Feature | Mean \|SHAP\| | Reading |
+|---|---|---|
+| `band_row` | 0.168 | Hot band sitting **lower** in the image → Unsound |
+| `mean_rel` | 0.116 | **Cooler** frame than at the weld start → Unsound |
+| `contrast_rel` | 0.068 | **Weaker** hot spot → Unsound |
+| `hot_area` | 0.059 | **Smaller** hot area → Unsound |
+| `asymmetry` | 0.058 | More heat on the left half → Unsound |
+| `band_width` | 0.034 | **Narrower** hot band → Unsound |
+| `contrast_change` | 0.010 | Small effect |
+
+The model relies on physically meaningful signals (less heat, weaker and smaller melt zone). The strongest feature, the vertical position of the hot band, needs care: it may reflect a real shift of the melt zone, but it could also drift with time in the weld, so it is a candidate for a leakage check.
+
+![SHAP dependence of top feature](reports/figures/shap_top_feature.png)
+
 ## Plan
 | Phase | Content | Status |
 |---|---|---|
@@ -81,8 +100,8 @@ The non-linear model, using only current and past thermal information, now match
 | 3 | Physics-motivated features from thermal frames | Done |
 | 4 | Baseline model, split by weld to avoid leakage | Done |
 | 5 | Random Forest, cross-validation, threshold choice | Done |
-| 6 | Model explanation with SHAP | Next |
-| 7 | Test suite for data, features and pipeline | Planned |
+| 6 | Model explanation with SHAP | Done |
+| 7 | Test suite for data, features and pipeline | Next |
 | 8 | Streamlit dashboard | Planned |
 | 9 | Final results, reproducibility, limitations | Planned |
 

@@ -1,0 +1,29 @@
+# pyproject.toml
+# I describe my project here, so pip can install it and Python can import it
+# from anywhere as "laser_defect".
+
+[build-system]
+# I tell pip to build my package with setuptools.
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+# This is the name I import in Python: import laser_defect
+name = "laser_defect"
+version = "0.1.0"
+description = "Detecting weld discontinuities in laser beam welding from thermal (LWIR) camera frames"
+requires-python = ">=3.10"
+# I list only what phase 0 needs. I add more libraries in later phases.
+dependencies = [
+    "requests>=2.31",   # I use requests to download the dataset
+    "pandas>=2.0",      # I use pandas to read the label tables
+    "pytest>=7.0",      # I use pytest to test my code
+]
+
+[tool.setuptools.packages.find]
+# I tell setuptools that my Python code lives in the src/ folder.
+where = ["src"]
+
+[tool.pytest.ini_options]
+# I tell pytest to look for tests in the tests/ folder.
+testpaths = ["tests"]

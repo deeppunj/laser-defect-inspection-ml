@@ -1,0 +1,15 @@
+# .gitignore
+# I list files that git must NOT upload to GitHub.
+
+# The dataset is about 90 MB. I never upload it; anyone can re-download it
+# with: python -m laser_defect.download
+data/
+
+# Files Python and pytest create automatically while running.
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+
+# Mac system files.
+.DS_Store

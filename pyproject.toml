@@ -10,14 +10,16 @@ build-backend = "setuptools.build_meta"
 [project]
 # This is the name I import in Python: import laser_defect
 name = "laser_defect"
-version = "0.1.0"
+version = "0.2.0"
 description = "Detecting weld discontinuities in laser beam welding from thermal (LWIR) camera frames"
 requires-python = ">=3.10"
-# I list only what phase 0 needs. I add more libraries in later phases.
+# I add libraries phase by phase, so I always know why each one is here.
 dependencies = [
     "requests>=2.31",   # I use requests to download the dataset
     "pandas>=2.0",      # I use pandas to read the label tables
     "pytest>=7.0",      # I use pytest to test my code
+    "numpy>=1.24",      # phase 1: I store thermal frames as numerical arrays
+    "pillow>=10.0",     # phase 1: I use Pillow to open the .tiff thermal images
 ]
 
 [tool.setuptools.packages.find]

@@ -1,6 +1,5 @@
 # Laser Weld Defect Inspection with Machine Learning
 
-![tests](https://github.com/deeppunj/portfolio-DS-ML-AI/actions/workflows/tests.yml/badge.svg)
 
 **Status: complete (v1.0).** An end-to-end, tested machine-learning pipeline that detects laser-weld defects from thermal camera frames.
 

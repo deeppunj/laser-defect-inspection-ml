@@ -2,8 +2,8 @@
 # Tests that need the real dataset are skipped there (it is not stored in git).
 name: tests
 on: [push, pull_request]
-# This file must live in the REPOSITORY ROOT: portfolio-DS-ML-AI/.github/workflows/
-# so I tell GitHub to run every step inside my project folder.
+# This file lives in the repository root (.github/workflows/), so GitHub finds it.
+# The project is the repository root, so every step runs there.
 jobs:
   test:
     runs-on: ubuntu-latest
